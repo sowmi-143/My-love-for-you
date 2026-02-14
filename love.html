@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forever Ammu 💖</title>
+
+<style>
+body{
+    margin:0;
+    overflow:hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background:black;
+    color:white;
+    perspective:1500px; 
+}
+
+/* Background Animation */
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:-1;
+}
+
+/* Sections */
+.section{
+    position:absolute;
+    width:100%;
+    height:100vh;
+    display:none; 
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    text-align: center;
+}
+
+.section.active{
+    display:flex;
+    animation: slideIn 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateZ(-500px) rotateX(20deg); }
+    to { opacity: 1; transform: translateZ(0) rotateX(0deg); }
+}
+
+/* 3D Italic Title Style - White with Pink Shadow */
+.title-3d {
+    font-size: 2.8rem;
+    font-weight: bold;
+    font-style: italic; 
+    color: #ffffff; 
+    text-transform: uppercase;
+    text-shadow: 
+        2px 2px 0px #ff4b91, 
+        4px 4px 10px rgba(255, 75, 145, 0.8),
+        0 0 20px rgba(255, 75, 145, 0.5); 
+    margin-bottom: 25px;
+    transform: rotateX(10deg);
+}
+
+/* Glass Shake Effect Card */
+.card{
+    background:rgba(255,255,255,0.1);
+    backdrop-filter:blur(20px);
+    padding:30px;
+    border-radius:30px;
+    box-shadow:0 25px 50px rgba(255,0,150,0.3);
+    border: 1px solid rgba(255,255,255,0.3);
+    width:85%;
+    max-width:400px;
+    animation: glassShake 4s ease-in-out infinite; 
+    transform-style: preserve-3d;
+}
+
+@keyframes glassShake {
+    0%, 100% { transform: translateY(0) rotateY(0deg) rotateX(0deg); }
+    25% { transform: translateY(-10px) rotateY(5deg) rotateX(2deg); }
+    50% { transform: translateY(0) rotateY(0deg) rotateX(-2deg); }
+    75% { transform: translateY(10px) rotateY(-5deg) rotateX(2deg); }
+}
+
+/* Rotating Teddy */
+.teddy-rotate {
+    font-size: 100px;
+    display: inline-block;
+    animation: teddySpin 5s linear infinite;
+    transform-origin: center;
+    filter: drop-shadow(0 0 15px rgba(255, 75, 145, 0.5));
+}
+
+@keyframes teddySpin {
+    from { transform: rotateY(0deg); }
+    to { transform: rotateY(360deg); }
+}
+
+input[type="password"] {
+    padding: 12px;
+    border-radius: 15px;
+    border: none;
+    background: rgba(255,255,255,0.25);
+    color: white;
+    text-align: center;
+    margin-bottom: 15px;
+    outline: none;
+    font-style: italic;
+}
+
+button{
+    padding:14px 30px;
+    border:none;
+    border-radius:30px;
+    background:linear-gradient(45deg,#ff4b91,#ff0066);
+    color:white;
+    cursor:pointer;
+    font-weight: bold;
+    font-style: italic;
+    transition: 0.4s;
+}
+
+button:hover{ transform: scale(1.1) translateZ(20px); box-shadow: 0 0 20px #ff4b91; }
+
+#mediaContainer {
+    width: 100%;
+    min-height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 15px 0;
+}
+
+img, video {
+    width: auto;
+    height: auto;
+    max-width: 100%;    /* கார்டை விட அகலம் தாண்டாது */
+    max-height: 45vh;   /* ஸ்கிரீன் உயரத்தில் சரிபாதி மட்டும் (Next பட்டன் மறையாமல் இருக்க) */
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(255,0,100,0.3);
+    object-fit: contain; /* இதுதான் முக்கியம்: போட்டோவை வெட்டாமல் முழுமையாகக் காட்டும் */
+    display: block;
+}
+.noBtn{ position:absolute; transition: 0.15s; }
+
+.heart{
+    position:fixed;
+    bottom:-10px;
+    animation:float 6s linear infinite;
+    pointer-events: none;
+}
+@keyframes float{
+    0%{transform:translateY(0) rotate(0deg); opacity:1;}
+    100%{transform:translateY(-110vh) rotate(360deg); opacity:0;}
+}
+</style>
+</head>
+<body>
+
+    <audio id="bgMusic" src="Eppadi Vandhaayo From Aaromaley-320kbps.mp3" loop></audio>
+
+<canvas id="bg"></canvas>
+
+<div id="lock" class="section active">
+    <h2 class="title-3d">HAPPY VALENTINE'S DAY My Husband</h2>
+    <div class="card">
+        <p style="font-style: italic; font-weight: bold;">Enter My Heart password...😘</p>
+        <input type="password" id="pass" placeholder="Password...">
+        <br>
+        <button onclick="unlock()"> Open My love💕</button>
+        <p id="error" style="color: #ff4b91; margin-top: 10px; font-weight: bold;"></p>
+    </div>
+</div>
+
+<div id="heart" class="section">
+    <div class="card">
+        <h2 class="title-3d" style="font-size: 1.8rem;">💕 Access Granted Da Pattukutty 💕</h2>
+        <p style="font-style: italic;">You found the key to my soul.</p>
+        <button onclick="goHome()">Open Our Journey 🤍🎀 ➡</button>
+    </div>
+</div>
+
+<div id="home" class="section">
+    <div class="card">
+        <div class="teddy-rotate">🧸</div>
+        <h1 class="tittle-3d" style="font-size: 1.4rem;">Our First Meet🤍🎀</h1>
+        <p style="font-style: italic; line-height: 1.6;">
+            Collector Nagar bus stop la wait pannitu irundha nee enakaga...🤍<br><br>
+            Murugar Vel kudutha moment… That day changed everything ♾️💕<br><br>
+            From strangers to soulmates… 😍 <br><br>
+            From smiles to forever love…🐼
+        </p>
+        <button onclick="openMemories()">Open Our Beautiful Journey🤍🎀</button>
+    </div>
+</div>
+
+<div id="memories" class="section">
+    <div class="card">
+        <h2 class="title-3d" style="font-size: 1.5rem;"> Beautiful Journey Of Our Life🤍🎀</h2>
+        <div id="mediaContainer">
+            <img id="memoryImg" src="" style="display:none;">
+            <video id="memoryVid" controls style="display:none;"></video>
+        </div>
+        <p id="memoryText" style="font-weight: bold; min-height: 40px; font-style: italic;"></p>
+        <button onclick="nextMemory()">Next🤍🎀 ➡</button>
+    </div>
+</div>
+
+<div id="story" class="section">
+    <div class="card" style="max-height: 85vh; display: flex; flex-direction: column;">
+        <h2 class="title-3d" style="font-size: 1.5rem; flex-shrink: 0;">Our Love Story♾️💕</h2>
+        
+        <div style="overflow-y: auto; padding-right: 10px; margin-bottom: 15px; text-align: left; scrollbar-width: thin; scrollbar-color: #ff4b91 rgba(255,255,255,0.1);">
+            <p style="font-size: 0.95rem; line-height: 1.8; font-style: italic; white-space: pre-line;">
+                Namma first time pesinadhu Snapchat la dhaan… but adhu romba deep ah illa. Just oru hi… oru smile… adhuvum konjam shyness kooda mix aana small talks. Appo adhu oru normal conversation madhiri dhaan therinjadhu. Life la innum evlo per varuvaanga, poguvaanga nu nenachen. Aana destiny silent ah oru script ezhudhitu irundhudhu.🎀🤍
+
+                Oru naal Instagram la nee message panna. “Hi” nu vandha antha simple message dhaan namma real story oda first page. Andha moment la enaku theriyala — idhu dhaan en life oda turning point nu. Na appo breakup pain la irundhen… heart already romba weak ah irundhudhu. Trust panna bayam, sirikka bayam, love panna innum bayam. Aana nee… nee vandha style vera.
+
+                Nee enaku lover ah varala mudhala… listener ah vandha. Na solra ovvoru kastathayum calm ah ketta. Advice kudukumbodhu pressure illa… care dhaan irundhudhu. Na azhudhadhum nee thangina… na silent ah irundhaalum nee purinjukitta. Appo dhaan therinjadhu — sila per namma life la varuvaanga heal panna dhaan. Nee enaku healer ah, painkiller ah, best friend ah maarina. 💔➡💖
+
+                Slow ah namma friendship grow aachu. Daily chats, midnight calls, random fights, silly laughs… ivlo ellam serndhu namma bond strong aachu. Un presence la enaku oru safe space kedaichuduchu. World fulla noise irundhaalum, un kitta pesina udane mind calm aagum. Best friend nu sonna podhum illa… nee en soul oda comfortable side.🫶🫶
+
+                Oru naal meet panna plan pannom. Na college mudichitu unna paaka vandhen. Heart romba fast ah beat aagudhu… excitement ah illa bayam ah theriyala. Collector Nagar la car la wait pannitu irundha nee. Andha sight… innum en mind la slow motion la dhaan varudhu. First time un face real ah paatha moment… time konjam stop aana madhiri.😘😘😘
+
+                Nee enaku Murugar Vel kudutha moment… adhu romba special. 🙏 Adhu just oru gift illa… protection, blessing, promise madhiri feel aachu. “Un life la naan iruken, safe ah irupa” nu sollama sonna maadhiri. Adhu enaku oru sign madhiri dhaan.🤍
+
+                Apram park ponom… neraya pesinom. Phone la pesinadhu vida real la pesinadhu innum beautiful. Un sirippu, un eyes la irundha sincerity… ellam en heart la permanent mark poduchu. Night enna safe ah veetuku drop pannina. Andha care… andha responsibility… andha respect — adhu dhaan en heart ah completely win panniduchu.
+
+                Andha naal la naan conscious ah decide pannala. “I love him” nu sollala. Aana en heart already decide panniduchu. 😌 Un kooda irundha calm, un kooda irundha happiness… adhu ellam fake panna mudiyadhu. Friendship la start aana bond… slowly love ah maariduchu.🤍🎀
+
+                Ipdi pesi pesi, sirichu sirichu, purinjukittu purinjukittu… namma story grow aachu. Intha generation la genuine ah care panna, respect panna, stay panna romba rare. Aana enaku kedaicha pure gem nee dhaan. 💎
+
+                Finally… na dhaan first propose panninen. 😌 Bayam irundhudhu… but unna lose panna bayam adhigam. Rendu perukum love irundhudhu. Rendu perukum theriyum. Aana words solla wait pannom.
+
+                June 27 — un birthday.
+                Andha naal en life la marakka mudiyatha naal.
+
+                Na unaku oru car gift kuduthen. Adhu just gift illa… “Life fulla un kooda journey poganum” nu oru silent promise.... Andha naal rendu perum ring exchange pannom. Rings change pannitu first time “I love you” nu sonnom. ❤️ Andha three words simple ah irundhaalum… adhu en soul la permanent ah store aayiduchu.🤍
+
+                Apram namma life daily calls, chats, emotions la full aayiduchu. Morning good morning, night good night, random updates, sudden video calls, small fights, big understanding.
+
+                Na konjam lusu madhiri… stupid ah sanda poduven sometimes. Overthink pannuven. Silly vishayathukku kovam varum. Aana nee… ipo varaikum en kitta kovama pesala. Na sanda potaalum nee calm ah baby madhiri handle pannuva. Un patience dhaan enaku biggest lesson.😊
+
+                Nee enna un baby madhiri pathukura.💕
+                Na onnu aasai patta next second ne vangitharuva.💕
+                Na sapdala nu sonna feed pannuva.💕
+                Na tired ah irundha thoonga vaikiruva.💕
+                Na light ah dull aana nee first azhuva.💕
+
+                Unoda biggest aasai — “Naa epovum sirichitu irukanum😘😘.”
+                Adhu dhaan un love oda purest line.
+
+                Nee enaku neraya panniruka. Small small details la kooda nee observe pannuva — enaku enna pudikum, enna pudikadhu, en mood epdi change aagudhu. Ellam pathu pathu panra. But enala romba edhum panna mudiyala nu yosicha konjam guilt varum. Aana nee oru naal kooda en kitta edhum ketathu illa. No expectations. No demands. Just love.
+
+                Un family pathi sollanum na… ammu… I never imagined I’ll get such a beautiful family in my life. Un patti amma romba innocent, romba caring. Un amma kitta neraya time pesiruken… romba pudikum. That comfort I feel when talking to her is something special. Unakku theriyathu… but enaku un family kitta pesa romba pidikum.
+
+                Akka kitta first la pesumbodhu romba bayam. Shy ah irundhen. But ippo romba comfortable. Un appa, un veedu, andha whole vibe — enaku own home madhiri feel kudukum.
+
+                Nee enakaga cook panni tharathu… that’s not just food. That’s love served with care. That’s blessing on a plate. Andha moment la enaku feel aagudhu — “I’m really lucky.”
+
+                In this generation la loyalty rare. Genuine love rare. Patience rare. Aana enaku kedaicha pure gem nee dhaan 💎💕🎀🤍♾️🥰🤗🦋🫶
+
+                Nee enaku varam 🤍🎀
+                Nee enaku blessing 🙏
+                Nee en safe place 🫶
+
+                From a simple hi on Snapchat…
+                To a life promise on June 27…
+                From friendship to forever…
+
+                Na perfect illa. Na sanda poduven. Na overthink pannuven. Na lusu madhiri behave pannuven. But en love un mela pure, deep, and permanent.🤍🎀🫶💕😘🦋🤗♾️🥰
+
+                Car gift, ring exchange, proposal — adhellam vida perusa oru vishayam iruku…
+
+                Un presence.
+                Un patience.
+                Un unconditional love🎀🤍
+
+                Nee enaku just boyfriend illa… nee enaku varam 🤍
+                Life fulla storm vandhaalum, un kai vidaama nadakkanum nu aasai🤍
+                Namma story simple ah start aanaalum, adhu enaku epic love story🤍
+                First hi la irundhu forever varaikum…🤍
+                En heart choose pannina oru thani person — adhu nee dhaan🤍
+            </p>
+        </div>
+        <button onclick="openValentine()" style="flex-shrink: 0;">Open My Valentine🎀🤍</button>
+    </div>
+</div>
+<div id="marry" class="section">
+    <div class="card">
+        <h1 id="marryHeader" class="title-3d" style="font-size: 1.8rem;">Will You Marry Me?..... 💍</h1>
+        <div id="actionButtons">
+            <button onclick="yesAnswer()">Yes 🤍</button>
+            <button class="noBtn" onmouseover="moveNo(this)">No 😜</button>
+        </div>
+        <h3 id="finalMsg" style="margin-top: 20px; color: #ffeb3b; font-style: italic; text-shadow: 1px 1px 5px black;"></h3>
+    </div>
+</div>
+
+<script>
+/* Cute Baby Voice Function */
+function speak(text) {
+    window.speechSynthesis.cancel();
+    let msg = new SpeechSynthesisUtterance(text);
+    
+    let voices = window.speechSynthesis.getVoices();
+    // லோக்கல் சிஸ்டமில் உள்ள பெண் குரலை தேடுகிறது
+    let femaleVoice = voices.find(voice => 
+        voice.name.includes('Google US English') || 
+        voice.name.includes('Female') || 
+        voice.name.includes('Samantha') ||
+        voice.name.includes('Zira')
+    );
+    
+    if (femaleVoice) msg.voice = femaleVoice;
+
+    msg.pitch = 1.6;  // High pitch for baby effect
+    msg.rate = 0.85;  // Slightly slow for cuteness
+    msg.volume = 1;
+
+    window.speechSynthesis.speak(msg);
+}
+
+/* Navigation & Logic */
+function show(id){
+    document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+}
+
+function unlock(){
+    let val = document.getElementById("pass").value;
+    let music = document.getElementById("bgMusic"); // This finds your song
+
+    if(val.toLowerCase() === "ammu"){
+        show("heart");
+        createHearts();
+        
+        // This starts the music when he clicks the button
+        music.play().catch(e => console.log("Audio play blocked until interaction"));
+        music.volume = 0.6; // Sets volume to 60% so it's not too loud
+        
+    } else {
+        document.getElementById("error").innerText = "Wrong Password 💔";
+        speak("Only Ammu can enter");
+    }
+}
+
+function goHome(){ show("home"); }
+function openMemories(){ index = 0; show("memories"); loadMemory(); }
+function openValentine(){ show("marry"); }
+
+/* Memory List */
+let index = 0;
+const mediaList = [
+    {type: 'img', url: 'WhatsApp Image 2026-02-08 at 6.20.06 PM (2).jpeg', text: "Our First Meet🤍"},
+    { type: 'img', url: 'WhatsApp Image 2026-02-08 at 6.07.41 PM (1).jpeg', text: "Unforgetable Day In My Life💕" },
+    { type: 'img', url: 'WhatsApp Image 2026-02-08 at 6.07.41 PM.jpeg', text: "Best friends ✨" },
+    { type: 'vid', url: 'WhatsApp Video 2026-02-08 at 2.30.47 PM.mp4', text: "Intha moment eppavum special 🎥" },
+    { type: 'img', url: 'WhatsApp Image 2026-02-08 at 6.20.06 PM (1).jpeg', text: "Safe place 💖" },
+    { type: 'img', url: 'WhatsApp Image 2026-02-08 at 6.20.06 PM (3).jpeg', text: "You healed me 💞" },
+    { type: 'img', url: 'WhatsApp Image 2026-02-08 at 6.20.06 PM (5).jpeg', text: "smiley days with you🎀🤍" },
+    { type: 'vid', url: 'WhatsApp Video 2026-02-08 at 2.41.57 PM.mp4', text: "Un kooda irukura ovvoru second-um 🎬" },
+    { type: 'img', url: 'WhatsApp Image 2026-02-08 at 6.20.06 PM (7).jpeg', text: " Lovable days🌙" },
+    { type: 'img', url: 'WhatsApp Image 2026-02-08 at 6.20.06 PM (9).jpeg', text: "Pure gem 💎" },
+    { type: 'img', url: 'WhatsApp Image 2026-02-08 at 6.20.06 PM (10).jpeg', text: "My peace 🕊" },
+    { type: 'img', url: 'WhatsApp Image 2026-02-08 at 6.20.07 PM (1).jpeg', text: "God's gift 🙏" },
+    { type: 'img', url: 'WhatsApp Image 2026-02-08 at 6.20.07 PM.jpeg', text: "Forever us 🎀🤍" }
+];
+
+function loadMemory(){
+    let current = mediaList[index];
+    let img = document.getElementById("memoryImg");
+    let vid = document.getElementById("memoryVid");
+    img.style.display = "none";
+    vid.style.display = "none";
+    vid.pause();
+    if(current.type === 'img'){
+        img.src = current.url;
+        img.style.display = "block";
+    } else {
+        vid.src = current.url;
+        vid.style.display = "block";
+    }
+    document.getElementById("memoryText").innerText = current.text;
+}
+
+function nextMemory(){
+    index++;
+    if(index < mediaList.length) loadMemory();
+    else show("story");
+}
+
+/* Interaction Effects */
+function moveNo(btn){
+    let x = Math.random() * (window.innerWidth - 100);
+    let y = Math.random() * (window.innerHeight - 50);
+    btn.style.left = x + "px";
+    btn.style.top = y + "px";
+}
+
+function yesAnswer(){
+    document.getElementById("marryHeader").innerText = "I Love You! 🤍";
+    document.getElementById("finalMsg").innerText = "I love you forever my husband 🤍";
+    document.getElementById("actionButtons").style.display = "none";
+    speak("I love you🤍 I love you forever my husband🤍");
+}
+
+/* Floating Hearts Background */
+function createHearts(){
+    setInterval(()=>{
+        let heart=document.createElement("div");
+        heart.className="heart";
+        heart.innerHTML="🤍";
+        heart.style.left=Math.random()*100+"vw";
+        heart.style.fontSize=Math.random()*20+10+"px";
+        document.body.appendChild(heart);
+        setTimeout(()=>heart.remove(),6000);
+    },400);
+}
+
+/* Particle Background */
+const canvas=document.getElementById("bg");
+const ctx=canvas.getContext("2d");
+function resize() {
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
+}
+window.onresize = resize;
+resize();
+
+let particles=[];
+for(let i=0;i<60;i++){
+    particles.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        r:Math.random()*3+1,
+        vy:Math.random()*1 + 0.5
+    });
+}
+
+function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle="rgba(255, 182, 193, 0.4)";
+    particles.forEach(p=>{
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fill();
+        p.y += p.vy;
+        if(p.y > canvas.height) p.y = -10;
+    });
+    requestAnimationFrame(draw);
+}
+draw();
+window.speechSynthesis.onvoiceschanged = () => {};
+</script>
+
+</body>
+</html>
